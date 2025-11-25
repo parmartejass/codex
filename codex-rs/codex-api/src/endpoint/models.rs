@@ -83,6 +83,7 @@ impl<T: HttpTransport, A: AuthProvider> ModelsClient<T, A> {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::provider::RequestCompression;
     use crate::provider::RetryConfig;
     use crate::provider::WireApi;
     use async_trait::async_trait;
@@ -160,6 +161,7 @@ mod tests {
                 retry_5xx: true,
                 retry_transport: true,
             },
+            request_compression: RequestCompression::None,
             stream_idle_timeout: Duration::from_secs(1),
         }
     }

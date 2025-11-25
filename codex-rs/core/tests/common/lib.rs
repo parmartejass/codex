@@ -14,10 +14,14 @@ use std::path::PathBuf;
 use assert_cmd::cargo::cargo_bin;
 
 pub mod process;
+pub mod request;
 pub mod responses;
 pub mod streaming_sse;
 pub mod test_codex;
 pub mod test_codex_exec;
+
+pub use request::RequestBodyExt;
+pub use request::body_contains;
 
 #[track_caller]
 pub fn assert_regex_match<'s>(pattern: &str, actual: &'s str) -> regex_lite::Captures<'s> {
