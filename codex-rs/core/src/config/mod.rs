@@ -301,6 +301,9 @@ pub struct Config {
     /// or placeholder replacement will occur for fast keypress bursts.
     pub disable_paste_burst: bool,
 
+    /// When `false`, disables analytics across Codex product surfaces in this machine.
+    pub analytics: Option<bool>,
+
     /// OTEL configuration (exporter type, endpoint, headers, etc.).
     pub otel: crate::config::types::OtelConfig,
 }
@@ -680,6 +683,9 @@ pub struct ConfigToml {
     /// All characters are inserted as they are received, and no buffering
     /// or placeholder replacement will occur for fast keypress bursts.
     pub disable_paste_burst: Option<bool>,
+
+    /// When `false`, disables analytics across Codex product surfaces in this machine.
+    pub analytics: Option<bool>,
 
     /// OTEL configuration.
     pub otel: Option<crate::config::types::OtelConfigToml>,
@@ -1230,6 +1236,7 @@ impl Config {
             notices: cfg.notice.unwrap_or_default(),
             check_for_update_on_startup,
             disable_paste_burst: cfg.disable_paste_burst.unwrap_or(false),
+            analytics: cfg.analytics,
             tui_notifications: cfg
                 .tui
                 .as_ref()
@@ -2995,6 +3002,7 @@ model_verbosity = "high"
                 tui_notifications: Default::default(),
                 animations: true,
                 show_tooltips: true,
+                analytics: None,
                 otel: OtelConfig::default(),
             },
             o3_profile_config
@@ -3070,6 +3078,7 @@ model_verbosity = "high"
             tui_notifications: Default::default(),
             animations: true,
             show_tooltips: true,
+            analytics: None,
             otel: OtelConfig::default(),
         };
 
@@ -3160,6 +3169,7 @@ model_verbosity = "high"
             tui_notifications: Default::default(),
             animations: true,
             show_tooltips: true,
+            analytics: None,
             otel: OtelConfig::default(),
         };
 
@@ -3236,6 +3246,7 @@ model_verbosity = "high"
             tui_notifications: Default::default(),
             animations: true,
             show_tooltips: true,
+            analytics: None,
             otel: OtelConfig::default(),
         };
 

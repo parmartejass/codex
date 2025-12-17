@@ -533,6 +533,15 @@ Some of the most common MCPs we've seen are:
 
 ## Observability and telemetry
 
+### analytics
+
+Use the top-level `analytics` flag to control whether analytics telemetry is enabled across Codex products in this machine.
+If unset, the default is `true` outside the EU and `false` otherwise.
+
+```toml
+analytics = false
+```
+
 ### otel
 
 Codex can emit [OpenTelemetry](https://opentelemetry.io/) **log events** that
@@ -975,6 +984,7 @@ Valid values:
 | `tui`                                            | table                                                             | TUI‑specific options.                                                                                                           |
 | `tui.notifications`                              | boolean \| array<string>                                          | Enable desktop notifications in the tui (default: true).                                                                        |
 | `hide_agent_reasoning`                           | boolean                                                           | Hide model reasoning events.                                                                                                    |
+| `analytics`                                      | boolean                                                           | Enable analytics events. When unset, the default is `false` for EU users and `true` otherwise.                                  |
 | `check_for_update_on_startup`                    | boolean                                                           | Check for Codex updates on startup (default: true). Set to `false` only if updates are centrally managed.                       |
 | `show_raw_agent_reasoning`                       | boolean                                                           | Show raw reasoning (when available).                                                                                            |
 | `model_reasoning_effort`                         | `minimal` \| `low` \| `medium` \| `high`\|`xhigh`                 | Responses API reasoning effort.                                                                                                 |
