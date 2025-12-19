@@ -11,6 +11,7 @@ use codex_core::RequestCompression;
 use codex_core::ResponseEvent;
 use codex_core::ResponseItem;
 use codex_core::WireApi;
+use codex_core::features::RequestCompressionFeature;
 use codex_core::openai_models::models_manager::ModelsManager;
 use codex_otel::otel_manager::OtelManager;
 use codex_protocol::ConversationId;
@@ -48,7 +49,7 @@ async fn responses_stream_includes_subagent_header_on_review() {
         env_key_instructions: None,
         experimental_bearer_token: None,
         wire_api: WireApi::Responses,
-        request_compression: RequestCompression::Zstd,
+        request_compression: RequestCompression::None,
         query_params: None,
         http_headers: None,
         env_http_headers: None,
@@ -143,7 +144,7 @@ async fn responses_stream_includes_subagent_header_on_other() {
         env_key_instructions: None,
         experimental_bearer_token: None,
         wire_api: WireApi::Responses,
-        request_compression: RequestCompression::Zstd,
+        request_compression: RequestCompression::None,
         query_params: None,
         http_headers: None,
         env_http_headers: None,
@@ -337,13 +338,13 @@ async fn responses_request_body_is_zstd_encoded() {
     let request_recorder = responses::mount_sse_once(&server, response_body).await;
 
     let provider = ModelProviderInfo {
-        name: "mock".into(),
+        name: "OpenAI".into(),
         base_url: Some(format!("{}/v1", server.uri())),
         env_key: None,
         env_key_instructions: None,
         experimental_bearer_token: None,
         wire_api: WireApi::Responses,
-        request_compression: RequestCompression::Zstd,
+        request_compression: RequestCompression::None,
         query_params: None,
         http_headers: None,
         env_http_headers: None,
@@ -357,6 +358,9 @@ async fn responses_request_body_is_zstd_encoded() {
     let mut config = load_default_config_for_test(&codex_home);
     config.model_provider_id = provider.name.clone();
     config.model_provider = provider.clone();
+    config
+        .features
+        .set_request_compression(RequestCompressionFeature::Zstd);
     let effort = config.model_reasoning_effort;
     let summary = config.model_reasoning_summary;
     let model = ModelsManager::get_model_offline(config.model.as_deref());
@@ -378,9 +382,11 @@ async fn responses_request_body_is_zstd_encoded() {
         session_source.clone(),
     );
 
+    let auth_manager =
+        AuthManager::from_auth_for_testing(CodexAuth::create_dummy_chatgpt_auth_for_testing());
     let client = ModelClient::new(
         Arc::clone(&config),
-        None,
+        Some(auth_manager),
         model_family,
         otel_manager,
         provider,
@@ -389,11 +395,6 @@ async fn responses_request_body_is_zstd_encoded() {
         conversation_id,
         session_source,
     );
-    assert_eq!(
-        client.get_provider().request_compression,
-        RequestCompression::Zstd
-    );
-
     let mut prompt = Prompt::default();
     prompt.input = vec![ResponseItem::Message {
         id: None,
@@ -437,7 +438,7 @@ async fn responses_request_body_is_uncompressed_when_disabled() {
     let request_recorder = responses::mount_sse_once(&server, response_body).await;
 
     let provider = ModelProviderInfo {
-        name: "mock".into(),
+        name: "OpenAI".into(),
         base_url: Some(format!("{}/v1", server.uri())),
         env_key: None,
         env_key_instructions: None,
@@ -478,9 +479,11 @@ async fn responses_request_body_is_uncompressed_when_disabled() {
         session_source.clone(),
     );
 
+    let auth_manager =
+        AuthManager::from_auth_for_testing(CodexAuth::create_dummy_chatgpt_auth_for_testing());
     let client = ModelClient::new(
         Arc::clone(&config),
-        None,
+        Some(auth_manager),
         model_family,
         otel_manager,
         provider,
