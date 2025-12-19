@@ -7,7 +7,6 @@ use codex_core::ContentItem;
 use codex_core::ModelClient;
 use codex_core::ModelProviderInfo;
 use codex_core::Prompt;
-use codex_core::RequestCompression;
 use codex_core::ResponseEvent;
 use codex_core::ResponseItem;
 use codex_core::WireApi;
@@ -49,7 +48,6 @@ async fn responses_stream_includes_subagent_header_on_review() {
         env_key_instructions: None,
         experimental_bearer_token: None,
         wire_api: WireApi::Responses,
-        request_compression: RequestCompression::None,
         query_params: None,
         http_headers: None,
         env_http_headers: None,
@@ -144,7 +142,6 @@ async fn responses_stream_includes_subagent_header_on_other() {
         env_key_instructions: None,
         experimental_bearer_token: None,
         wire_api: WireApi::Responses,
-        request_compression: RequestCompression::None,
         query_params: None,
         http_headers: None,
         env_http_headers: None,
@@ -235,7 +232,6 @@ async fn responses_respects_model_family_overrides_from_config() {
         env_key_instructions: None,
         experimental_bearer_token: None,
         wire_api: WireApi::Responses,
-        request_compression: RequestCompression::None,
         query_params: None,
         http_headers: None,
         env_http_headers: None,
@@ -344,7 +340,6 @@ async fn responses_request_body_is_zstd_encoded() {
         env_key_instructions: None,
         experimental_bearer_token: None,
         wire_api: WireApi::Responses,
-        request_compression: RequestCompression::None,
         query_params: None,
         http_headers: None,
         env_http_headers: None,
@@ -442,7 +437,6 @@ async fn responses_request_body_is_uncompressed_when_disabled() {
         env_key_instructions: None,
         experimental_bearer_token: None,
         wire_api: WireApi::Responses,
-        request_compression: RequestCompression::None,
         query_params: None,
         http_headers: None,
         env_http_headers: None,
